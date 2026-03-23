@@ -9,6 +9,7 @@ resource "azurerm_cognitive_account" "openai" {
   kind                  = "OpenAI"
   sku_name              = "S0"
   custom_subdomain_name = "oai-${var.project_name}-${var.environment}"
+  local_auth_enabled    = false
   tags                  = var.tags
 }
 
@@ -33,12 +34,15 @@ resource "azurerm_cognitive_deployment" "gpt4o" {
 # ---------------------------------------------------------------------------
 
 resource "azurerm_storage_account" "func" {
-  name                     = replace("stfunc${var.project_name}${var.environment}", "-", "")
-  location                 = var.location
-  resource_group_name      = var.resource_group_name
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  tags                     = var.tags
+  name                            = replace("stfunc${var.project_name}${var.environment}", "-", "")
+  location                        = var.location
+  resource_group_name             = var.resource_group_name
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
+  min_tls_version                 = "TLS1_2"
+  https_traffic_only_enabled      = true
+  allow_nested_items_to_be_public = false
+  tags                            = var.tags
 }
 
 # ---------------------------------------------------------------------------
@@ -71,7 +75,12 @@ resource "azurerm_linux_function_app" "main" {
     type = "SystemAssigned"
   }
 
+  https_only = true
+
   site_config {
+    ftps_state          = "Disabled"
+    minimum_tls_version = "1.2"
+
     application_stack {
       python_version = "3.11"
     }

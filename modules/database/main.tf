@@ -6,6 +6,8 @@ resource "azurerm_cosmosdb_account" "main" {
   kind                = "GlobalDocumentDB"
   tags                = var.tags
 
+  minimal_tls_version = "Tls12"
+
   consistency_policy {
     consistency_level = "Session"
   }
