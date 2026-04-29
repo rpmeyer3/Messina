@@ -17,3 +17,6 @@ terraform.rc
 # Node / Vite
 node_modules
 dist
+
+# Claude Code
+.claude/
