@@ -1,4 +1,4 @@
-# Messina — AI-PIP
+# Messina: AI-PIP
 
 **Serverless AI Inference Pipeline on Azure** · Provisioned with Terraform.
 
